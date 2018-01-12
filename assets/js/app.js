@@ -6,6 +6,7 @@ $(document).ready(function() {
   });
   deleteVideo("#modal");
   showComingSoon(marvelUniverse);
+  selectBestMovies(marvelUniverse);
 });
 
 /* Obtiene información de la API */
@@ -18,7 +19,6 @@ var getInfo = (function(mainArr) {
   }
   for (var n = 0; n < titlesArr.length; n++) {
     var queryString = "https://www.omdbapi.com/?apikey=3a181f1c&t=" + titlesArr[n].replace(/ /g, "+") + "&y=" + yearsArr[n];
-    console.log(queryString);
     $.ajax({
       url: queryString,
       method: "GET"
@@ -65,13 +65,23 @@ var getInfo = (function(mainArr) {
 });
 
 /* Selecciona las películas con un rating por sobre el 80% */
-var orderPerRating = (function(obj) {
-  for (var key in obj) {
-    if (parseInt(obj[key]) > 80) {
-      bestMovies[key] = obj[key];
+var selectBestMovies = (function(arr) {
+  $("#best-movies").click(function() {
+    var newArr = [];
+    $("#movies").children().remove();
+    for (var i = 0; i < arr.length; i++) {
+      if (parseInt(arr[i].ratings) >= 80) {
+        newArr.push(arr[i]);
+      }
     }
-  }
-  console.log(bestMovies);
+    postInfo(newArr);
+  })
+  // for (var key in obj) {
+  //   if (parseInt(obj[key]) > 80) {
+  //     bestMovies[key] = obj[key];
+  //   }
+  // }
+  // console.log(bestMovies);
 });
 
 /* Toma la información de la data y la postea en la página */
